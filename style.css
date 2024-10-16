@@ -121,3 +121,114 @@ header ul li a{
     margin-right: 5px;
 }
 
+
+Argument(s) are different! Wanted:
+cacheContainerSpy.syncCache(
+    {},
+    "newPrimaryKey",
+    mockMultiMap,
+    "I",
+    "NEW",
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.syncCache(CacheContainer.java:970)
+Actual invocations have different arguments at position [4]:
+cacheContainerSpy.processSingleValueMapUpdate(
+    {},
+    {},
+    repoMock,
+    123,
+    "I",
+    "TestTable",
+    1,
+    10
+);
+-> at com.neustar.qi.cache.ProcessSingleValueMapUpdateTest.testProcessSingleValueUpdate_InsertTxn(ProcessSingleValueMapUpdateTest.java:89)
+cacheContainerSpy.getKey(
+    {},
+    "I",
+    123,
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:912)
+cacheContainerSpy.getDataFromRepo(
+    repoMock,
+    123,
+    "TestTable",
+    1,
+    10
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:918)
+cacheContainerSpy.syncCache(
+    {},
+    "newPrimaryKey",
+    mockMultiMap,
+    "I",
+    "newPrimaryKey",
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:923)
+cacheContainerSpy.syncCacheBySeqno(
+    {},
+    "I",
+    123,
+    mockMultiMap,
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
+
+Argument(s) are different! Wanted:
+cacheContainerSpy.syncCache(
+    {},
+    "newPrimaryKey",
+    mockMultiMap,
+    "I",
+    "NEW",
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.syncCache(CacheContainer.java:970)
+Actual invocations have different arguments at position [4]:
+cacheContainerSpy.processSingleValueMapUpdate(
+    {},
+    {},
+    repoMock,
+    123,
+    "I",
+    "TestTable",
+    1,
+    10
+);
+-> at com.neustar.qi.cache.ProcessSingleValueMapUpdateTest.testProcessSingleValueUpdate_InsertTxn(ProcessSingleValueMapUpdateTest.java:89)
+cacheContainerSpy.getKey(
+    {},
+    "I",
+    123,
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:912)
+cacheContainerSpy.getDataFromRepo(
+    repoMock,
+    123,
+    "TestTable",
+    1,
+    10
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:918)
+cacheContainerSpy.syncCache(
+    {},
+    "newPrimaryKey",
+    mockMultiMap,
+    "I",
+    "newPrimaryKey",
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:923)
+cacheContainerSpy.syncCacheBySeqno(
+    {},
+    "I",
+    123,
+    mockMultiMap,
+    "TestTable"
+);
+-> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
+
