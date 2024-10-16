@@ -1,138 +1,13 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing: border-box;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-}
-section
-{
-position: relative;
-width: 100%;
-min-height: 100vh;
-padding:100px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-background: #fff;
-}
-header{
-    position: absolute;
-    top: 0;
-    Left: 0;
-    width: 100%;
-    padding: 20px 100px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-header.logo{
-    position: relative;
-    max-width: 100%;
-    max-height: 100%;
-    width: 20px;
-    height: 20px;
-   
-}
-header ul{
-    position: relative;
-    display: flex;
-}
-header ul li{
-    list-style: none;
-}
-header ul li a{
-    display: inline-block;
-    color: #333;
-    font-weight: 400;
-    margin-left: 120px;
-    text-decoration: none;
-}
-.content{
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.content .textbox{
- position: relative;
- max-width: 600px;
-}
-.content .textbox h2{
-    color: rgb(96, 26, 26);
-    font-size: 4em;
-    line-height: 1.4em;
-    font-weight:500 ;
-
-}
-.content.textbox h2 span{
-    color: rgb(250, 153, 7);
-    font-size:1.2em;
-    font-weight: 900;
-
-}
-.content.textbox p{
-    color: rgb(138, 26, 26);
-
-}
-.link{
-    display: inline-block;
-    margin-top: 20px;
-    padding:8px 20px;
-    background:rgb(20, 20, 19);
-    color:#fff;
-    border-radius: 40px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-decoration: none;
-
-}
-/* .sci{
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-} */
-.sci li{
-    list-style: none;
-}
-.sci li a{
-   display: inline-block;
-   margin: 5px 0;
-   margin-left: 5px;
-   margin-right: 0px;
-    transform: scale(0.6);
-}
-.img1{
-    margin-top: 5px;
-    margin-bottom: 2px;
-    margin-left: 11px;
-    margin-right: 1px;
-}
-.img2{
-    margin-top: 5px;
-    margin-bottom: 2px;
-    margin-left: 1px;
-    margin-right: 5px;
-}
-
-
-Argument(s) are different! Wanted:
-cacheContainerSpy.syncCache(
+rgument(s) are different! Wanted:
+cacheContainerSpy.syncCacheBySeqno(
     {},
-    "newPrimaryKey",
-    mockMultiMap,
     "I",
-    "NEW",
+    123,
+    isNull(),
     "TestTable"
 );
--> at com.neustar.qi.cache.CacheContainer.syncCache(CacheContainer.java:970)
-Actual invocations have different arguments at position [4]:
+-> at com.neustar.qi.cache.CacheContainer.syncCacheBySeqno(CacheContainer.java:1059)
+Actual invocations have different arguments at position [3]:
 cacheContainerSpy.processSingleValueMapUpdate(
     {},
     {},
@@ -178,16 +53,15 @@ cacheContainerSpy.syncCacheBySeqno(
 -> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
 
 Argument(s) are different! Wanted:
-cacheContainerSpy.syncCache(
+cacheContainerSpy.syncCacheBySeqno(
     {},
-    "newPrimaryKey",
-    mockMultiMap,
     "I",
-    "NEW",
+    123,
+    isNull(),
     "TestTable"
 );
--> at com.neustar.qi.cache.CacheContainer.syncCache(CacheContainer.java:970)
-Actual invocations have different arguments at position [4]:
+-> at com.neustar.qi.cache.CacheContainer.syncCacheBySeqno(CacheContainer.java:1059)
+Actual invocations have different arguments at position [3]:
 cacheContainerSpy.processSingleValueMapUpdate(
     {},
     {},
@@ -231,4 +105,3 @@ cacheContainerSpy.syncCacheBySeqno(
     "TestTable"
 );
 -> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
-
