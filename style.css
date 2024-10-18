@@ -1,107 +1,206 @@
-rgument(s) are different! Wanted:
-cacheContainerSpy.syncCacheBySeqno(
-    {},
-    "I",
-    123,
-    isNull(),
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.syncCacheBySeqno(CacheContainer.java:1059)
-Actual invocations have different arguments at position [3]:
-cacheContainerSpy.processSingleValueMapUpdate(
-    {},
-    {},
-    repoMock,
-    123,
-    "I",
-    "TestTable",
-    1,
-    10
-);
--> at com.neustar.qi.cache.ProcessSingleValueMapUpdateTest.testProcessSingleValueUpdate_InsertTxn(ProcessSingleValueMapUpdateTest.java:89)
-cacheContainerSpy.getKey(
-    {},
-    "I",
-    123,
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:912)
-cacheContainerSpy.getDataFromRepo(
-    repoMock,
-    123,
-    "TestTable",
-    1,
-    10
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:918)
-cacheContainerSpy.syncCache(
-    {},
-    "newPrimaryKey",
-    mockMultiMap,
-    "I",
-    "newPrimaryKey",
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:923)
-cacheContainerSpy.syncCacheBySeqno(
-    {},
-    "I",
-    123,
-    mockMultiMap,
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
+public void syncCache(CustTxnLog custTxnLog,BigDecimal maxSeqNo) {
+			String tableName = custTxnLog.getTableName();
+			String txnType = custTxnLog.getTxType();
+			BigDecimal seqNo = custTxnLog.getTargetSeqNo();
+			String oldKey = null;
+			BigDecimal lastProcessedSeqNo = custTxnLog.getSeqNo();
+			switch (tableName) {
+			case Constants.URI_PROFILE:
+				processMultiValueMapUpdate(uriProfileMap, uriProfileSearchMap, uriProfileRepo, seqNo, txnType,tableName, lastProcessedSeqNo,maxSeqNo);
+				break;
+			// #define NRS_NS "NNS"
+			case Constants.SYS_CONFIG_PARAM:
+				// sys_CONFIG_PARAM
+				processMultiValueMapUpdate(sysConfigParamMap, sysConfigParamSearchMap, sysConfigParamRepo, seqNo,txnType,tableName,lastProcessedSeqNo,maxSeqNo);
+				break;
+			case Constants.CUST_PROF:
+				// CUST_PROF
+				processSingleValueMapUpdate(custProfMap, custProfSearchMap, custProfRepo, seqNo, txnType,tableName,lastProcessedSeqNo,maxSeqNo);
+				break;
+			case Constants.SWITCH_INFO:
+				// SWITCH_INFO
+				processMultiValueMapUpdate(switchInfoMap, switchInfoIpMap, switchInfoRepo, seqNo, txnType,tableName,lastProcessedSeqNo,maxSeqNo);
+				break;
+			case Constants.PSTN_RESPONSE:
+				// PSTN_RESPONSE
+				processSingleValueMapUpdate(pstnResponseMap, pstnResponseSearchMap, pstnResponseRepo, seqNo, txnType,tableName,lastProcessedSeqNo,maxSeqNo);
+				break;
+			case Constants.SERVICE:
+				// SERVICE
+				processMultiValueMapUpdate(serviceMap, serviceSearchMap, serviceRepo, seqNo, txnType,tableName,lastProcessedSeqNo,maxSeqNo);
+				break;
+			case Constants.CBM:
+				// CBM
+				CbmId cbmId = getCbmId(seqNo, custTxnLog.getAdditionalKey());
+				if (cbmId != null) {
+					syncCacheByKey(cbmMap, custTxnLog.getTxType(), cbmRepo,
+							cbmId.getCountryCode() + ":" + cbmId.getTn(), cbmId,tableName,lastProcessedSeqNo,maxSeqNo);
+				}
+				break;
+			case Constants.COUNTRY:
+				// COUNTRY
+				Country country = getDataFromRepo(countryRepo, seqNo.toString(),tableName,lastProcessedSeqNo,maxSeqNo);
+				if (country != null) {
+					syncCache(countryMap, seqNo.toString(), country, txnType, seqNo.toString(),tableName);
+					updateIsoCcCache(country);
+				}
+				break;
+			case Constants.CUST_CN_REGION:
+				// CUST_CN_REGION
+				custCnRegionMap.clear();
+				initCustCnRegion();
+				break;
+			case Constants.CC1_COUNTRY:
+				// CC1_COUNTRY
+				cc1CountryMap.clear();
+				initCc1Country();
+				break;
+			case Constants.URI_NAPTR:
+				// URI_NAPTR
+				uriNaptrMap.clear();
+				initUriNaptrCache();
+				break;
+			case Constants.URI_NAPTR_PARTNER:
+				// URI_NAPTR_PARTNER
+				uriNaptrPartnerMap.clear();
+				initUriNaptrPartnerCache();
+				break;
+			case Constants.CUST_COUNTRY_ACCESS:
+				// CUST_COUNTRY_ACCESS
+				custCountryAccessMap.clear();
+				initCustCountryAccessCache();
+				break;
+			case Constants.SPN_ALT_SPN:
+				// SPN_ALTSPN
+				spnAltspnMap.clear();
+				initSpnAltspnCache();
+				break;
+			case Constants.CUST_AGENT_SP:
+				// CUST_AGENT_SP
+				custAgentMap.clear();
+				initCustAgentSp();
+				break;
+			case Constants.CUST_COUNTRY_EXT:
+				// CUST_COUNTRY_EXT
+				custCountryExtMap.clear();
+				initCustCountryExt();
+				break;
+			case Constants.CUST_SPN:
+				// CUST_SPN
+			case Constants.SPN_MCC_MNC:
+				// SPN_MCC_MNC
+				spnMccMncMap.clear();
+				initSpnMccMncCache();
+				break;
+			case Constants.SPID_SPN:
+				// SPID_SPN
+				spidSpnMap.clear();
+				initSpidSpn();
+				break;
+			case Constants.MVNO_ALTSPN:
+				// MVNO_ALTSPN
+				mvnoAtlspnMap.clear();
+				initMvnoAltspn();
+				break;
+			case Constants.CUST_CC1_COUNTRY_ACCESS:
+				// CUST_CC1_COUNTRY_ACCESS
+				custCc1CountryAccessMap.clear();
+				initCustCc1CountryAccess();
+				break;
+			case Constants.CUST_CC1_COUNTRY_EXT:
+				// CUST_CC1_COUNTRY_EXT
+				custCc1CountryExtMap.clear();
+				initCustCc1CountryExt();
+				break;
+			case Constants.SERVICE_TYPE:
+				// SERVICE_TYPE
+				serviceTypeMap.clear();
+				initServiceType();
+				break;
+			case Constants.CUST_COUNTRY_EXT_TTL:
+				// CUST_COUNTRY_EXT_TTL
+				custCountryExtTtlMap.clear();
+				initCustCountryExtTtl();
+				break;
+			case Constants.CUST_CC1_COUNTRY_EXT_TTL:
+				// CUST_CC1_COUNTRY_EXT_TTL
+				custCc1CountryExtTtlMap.clear();
+				initCustCc1CountryExtTtl();
+				break;
+			case Constants.EXTERNAL_TIMEOUT:
+				// EXTERNAL_TIMEOUT
+				externalTimeoutMap.clear();
+				initExtTimeoutCache();
+				break;
+			case Constants.SUPPLIER_ID_SPN:
+				// SUPPLIER_ID_SPN
+				supplierIdSpnMap.clear();
+				initSupplierSpn();
+				break;
+			case Constants.CUST_SPN_ACCESS:
+				// CUST_SPN_ACCESS
+				break;
+			case Constants.SPN_NAME:
+				// SPN_NAME
+				spnNameMap.clear();
+				initSpnName();
+				break;
+			case Constants.CUST_NPAC_CONTRACT:
+				// CUST_NPAC_CONTRACT
+				custNpacContractMap.clear();
+				initCustNpacContract();
+				break;
+			case Constants.CUST_PREMIUM_CONFIG:
+				// CUST_PREMIUM_CONFIG
+				custPremiumConfigMap.clear();
+				initCustPremiumConfig();
+				break;
+			case Constants.PSTN_ATTRIBUTE:
+				// PSTN_ATTRIBUTE
+				pstnAttributeMap.clear();
+				initPstnAttribute();
+				break;
+			case Constants.GDI_GNP_NUMBERING_PLAN:
+				// GDI_GNP_NUMBERING_PLAN
+				GNPId gnpId = getGnpId(seqNo, custTxnLog.getAdditionalKey());
+				if (gnpId != null) {
+					syncCacheByKey(gnpMap, custTxnLog.getTxType(), gnpRepo,gnpId.getCountryCode() + ":" + gnpId.getCode(), gnpId,tableName,lastProcessedSeqNo,maxSeqNo);
+					
+				}
+				break;
+			case Constants.SPN_CAR:
+				// SPN_CAR
+				spnCarMap.clear();
+				initSpnCar();
+				break;
+			case Constants.WMRS_URI:
+				// WMRS_URI
+				wmrsUriMap.clear();
+				initWmrsUri();
+				break;
+			case Constants.CUSTOM_URI:
+				// CUSTOM_URI
+			case Constants.MVNO_CONFIG:
+				// MVNO_CONFIG
+				mvnoConfigMap.clear();
+				initMvnoConfig();
+				break;
+			case Constants.TYPE_1_DATA:
+				// TYPE_1_DATA
+				Type1DataId type1Id = getType1DataId(seqNo, custTxnLog.getAdditionalKey());
+				if (type1Id != null) {
+					syncCacheByKey(type1DataMap, custTxnLog.getTxType(), type1DataRepo,
+							type1Id.getCountryCode() + ":" + type1Id.getTn(), type1Id,tableName,lastProcessedSeqNo,maxSeqNo);
+				}
+				break;
+			case Constants.HIGH_RISK_RANGES:
+				// HIGH_RISK_RANGES--NO ACTION
+			case Constants.CUST_CERT:
+				// CUST_CERT
+				custCertMap.clear();
+				initCustCertCache();
+				break;
+			}
 
-Argument(s) are different! Wanted:
-cacheContainerSpy.syncCacheBySeqno(
-    {},
-    "I",
-    123,
-    isNull(),
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.syncCacheBySeqno(CacheContainer.java:1059)
-Actual invocations have different arguments at position [3]:
-cacheContainerSpy.processSingleValueMapUpdate(
-    {},
-    {},
-    repoMock,
-    123,
-    "I",
-    "TestTable",
-    1,
-    10
-);
--> at com.neustar.qi.cache.ProcessSingleValueMapUpdateTest.testProcessSingleValueUpdate_InsertTxn(ProcessSingleValueMapUpdateTest.java:89)
-cacheContainerSpy.getKey(
-    {},
-    "I",
-    123,
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:912)
-cacheContainerSpy.getDataFromRepo(
-    repoMock,
-    123,
-    "TestTable",
-    1,
-    10
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:918)
-cacheContainerSpy.syncCache(
-    {},
-    "newPrimaryKey",
-    mockMultiMap,
-    "I",
-    "newPrimaryKey",
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:923)
-cacheContainerSpy.syncCacheBySeqno(
-    {},
-    "I",
-    123,
-    mockMultiMap,
-    "TestTable"
-);
--> at com.neustar.qi.cache.CacheContainer.processSingleValueMapUpdate(CacheContainer.java:924)
+
+	}
